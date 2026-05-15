@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHOEZ – Step Up Your Style</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --orange: #f5640a;
+      --orange-light: #ff7a2b;
+      --black: #0a0a0a;
+      --dark: #111111;
+      --dark2: #1a1a1a;
+      --dark3: #222222;
+      --gray: #888888;
+      --light-gray: #cccccc;
+      --white: #ffffff;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-condensed: 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 3px; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.3s;
+    }
+    nav.scrolled { background: rgba(10,10,10,0.99); box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      letter-spacing: 2px;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--orange); }
+
+    .nav-links {
+      display: flex; gap: 2rem; list-style: none;
+    }
+    .nav-links a {
+      color: var(--light-gray);
+      text-decoration: none;
+      font-family: var(--font-condensed);
+      font-size: 0.9rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color 0.25s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 2px; background: var(--orange);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.25s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px; cursor: pointer;
+      background: none; border: none; padding: 4px;
+    }
+    .hamburger span { display: block; width: 26px; height: 2px; background: var(--white); transition: all 0.3s; }
+
+    .mobile-menu {
+      display: none; flex-direction: column;
+      position: fixed; top: 70px; left: 0; right: 0;
+      background: var(--dark); z-index: 999;
+      padding: 1.5rem 5%;
+      gap: 1rem;
+      border-bottom: 2px solid var(--orange);
+    }
+    .mobile-menu a {
+      color: var(--light-gray);
+      text-decoration: none;
+      font-family: var(--font-condensed);
+      font-size: 1rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--orange); }
+    .mobile-menu.open { display: flex; }
+
+    /* ─── PAGES ─── */
+    .page { display: none; min-height: 100vh; padding-top: 70px; }
+    .page.active { display: block; }
+
+    /* ─── BUTTONS ─── */
+    .btn-primary {
+      display: inline-block;
+      background: var(--orange);
+      color: var(--white);
+      padding: 0.75rem 2.2rem;
+      font-family: var(--font-condensed);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none; cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      transition: background 0.25s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--orange-light); transform: translateY(-2px); }
+
+    .btn-outline {
+      display: inline-block;
+      border: 1.5px solid var(--orange);
+      color: var(--orange);
+      padding: 0.65rem 2rem;
+      font-family: var(--font-condensed);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      background: transparent;
+      cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      transition: all 0.25s;
+    }
+    .btn-outline:hover { background: var(--orange); color: var(--white); }
+
+    /* ─── SECTION TITLE ─── */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: 3px;
+      color: var(--white);
+      line-height: 1;
+    }
+    .section-title span { color: var(--orange); }
+    .section-sub {
+      color: var(--gray);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      margin-top: 0.5rem;
+    }
+
+    /* ─── SHOE CARD ─── */
+    .shoe-card {
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      cursor: pointer;
+    }
+    .shoe-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(245,100,10,0.15);
+      border-color: rgba(245,100,10,0.4);
+    }
+    .shoe-card .img-wrap {
+      background: linear-gradient(135deg, #1a1a1a 0%, #222 50%, #1a1a1a 100%);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+    .shoe-card .img-wrap::before {
+      content: '';
+      position: absolute; bottom: 0; left: 10%; right: 10%; height: 30px;
+      background: radial-gradient(ellipse, rgba(0,0,0,0.4) 0%, transparent 70%);
+      filter: blur(8px);
+    }
+    .shoe-card img { 
+      max-height: 150px; 
+      max-width: 100%;
+      object-fit: contain; 
+      transition: transform 0.4s ease;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+      position: relative; z-index: 1;
+    }
+    .shoe-card:hover img { transform: scale(1.1) rotate(-4deg) translateY(-5px); filter: drop-shadow(0 20px 30px rgba(245,100,10,0.3)); }
+    .shoe-card .card-body { padding: 1rem 1.2rem 1.4rem; }
+    .shoe-card .card-name {
+      font-family: var(--font-condensed);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--white);
+    }
+    .shoe-card .card-desc { font-size: 0.78rem; color: var(--gray); margin-top: 0.25rem; line-height: 1.4; }
+    .shoe-card .card-price {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 0.8rem;
+    }
+    .shoe-card .price {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--orange);
+      letter-spacing: 1px;
+    }
+
+    /* ─── GRID ─── */
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+
+    /* ─── HOME PAGE ─── */
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 70px);
+      display: flex; align-items: center;
+      overflow: hidden;
+      background: var(--dark);
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(245,100,10,0.18) 0%, transparent 65%);
+    }
+    .hero-text { position: relative; z-index: 2; max-width: 550px; padding: 4rem 5%; }
+    .hero-tag {
+      display: inline-block;
+      background: var(--orange);
+      color: var(--white);
+      font-family: var(--font-condensed);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 9vw, 7.5rem);
+      line-height: 0.9;
+      letter-spacing: 4px;
+    }
+    .hero h1 .orange { color: var(--orange); }
+    .hero p {
+      color: var(--light-gray);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin: 1.5rem 0 2.5rem;
+      max-width: 380px;
+    }
+    .hero-shoe {
+      position: absolute; right: 3%; bottom: 0;
+      width: 55%; max-width: 680px;
+      animation: floatShoe 4s ease-in-out infinite;
+    }
+    .hero-shoe img { width: 100%; filter: drop-shadow(0 30px 60px rgba(245,100,10,0.4)) drop-shadow(0 0 80px rgba(245,100,10,0.15)); object-fit: contain; }
+    @keyframes floatShoe {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-20px) rotate(-5deg); }
+    }
+    .hero-dots { display: flex; gap: 0.5rem; margin-top: 2rem; }
+    .hero-dot {
+      width: 28px; height: 4px;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer; transition: all 0.3s;
+    }
+    .hero-dot.active { background: var(--orange); width: 40px; }
+
+    .section { padding: 6rem 0; }
+    .section-header { margin-bottom: 3rem; }
+
+    .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+    .feature-item { text-align: center; }
+    .feature-icon {
+      width: 60px; height: 60px;
+      border: 2px solid var(--orange);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.5rem;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      transition: background 0.3s;
+    }
+    .feature-item:hover .feature-icon { background: var(--orange); }
+    .feature-item h4 {
+      font-family: var(--font-condensed);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 0.4rem;
+    }
+    .feature-item p { font-size: 0.8rem; color: var(--gray); line-height: 1.5; }
+
+    .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    .gallery-item {
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1a1a1a, #222);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .gallery-item img { width: 90%; height: 90%; object-fit: contain; padding: 0.5rem; transition: transform 0.4s; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5)); }
+    .gallery-item::after {
+      content: '🔍';
+      position: absolute; inset: 0;
+      background: rgba(245,100,10,0.7);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .gallery-item:hover img { transform: scale(1.1); }
+    .gallery-item:hover::after { opacity: 1; }
+
+    /* Reviews */
+    .review-card {
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 1.8rem;
+      transition: border-color 0.3s;
+    }
+    .review-card:hover { border-color: rgba(245,100,10,0.3); }
+    .review-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; }
+    .review-avatar {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      background: var(--dark3);
+      overflow: hidden;
+      border: 2px solid var(--orange);
+      flex-shrink: 0;
+    }
+    .review-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .review-name {
+      font-family: var(--font-condensed);
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+    }
+    .stars { color: var(--orange); font-size: 0.75rem; margin-top: 2px; }
+    .review-text { font-size: 0.85rem; color: var(--light-gray); line-height: 1.6; }
+
+    /* Newsletter */
+    .newsletter-section {
+      background: var(--dark2);
+      border-top: 2px solid var(--orange);
+      border-bottom: 2px solid var(--orange);
+      padding: 4rem 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 3rem;
+    }
+    .newsletter-text h3 {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      letter-spacing: 3px;
+    }
+    .newsletter-text p { color: var(--gray); margin-top: 0.3rem; font-size: 0.9rem; }
+    .newsletter-form { display: flex; gap: 0; flex: 1; max-width: 500px; }
+    .newsletter-form input {
+      flex: 1;
+      background: var(--dark3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-right: none;
+      padding: 0.85rem 1.2rem;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.25s;
+    }
+    .newsletter-form input:focus { border-color: var(--orange); }
+    .newsletter-form input::placeholder { color: var(--gray); }
+    .newsletter-form button {
+      background: var(--orange);
+      border: none; color: var(--white);
+      padding: 0 1.8rem;
+      font-family: var(--font-condensed);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: background 0.25s;
+    }
+    .newsletter-form button:hover { background: var(--orange-light); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--dark);
+      padding: 4rem 5% 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1.5fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .footer-logo span { color: var(--orange); }
+    .footer-desc { font-size: 0.85rem; color: var(--gray); line-height: 1.7; max-width: 220px; }
+    .footer-col h5 {
+      font-family: var(--font-condensed);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.6rem; }
+    .footer-col a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--orange); }
+    .footer-col .contact-item { font-size: 0.85rem; color: var(--gray); margin-bottom: 0.6rem; line-height: 1.5; }
+    .social-links { display: flex; gap: 0.7rem; margin-top: 1rem; }
+    .social-btn {
+      width: 36px; height: 36px;
+      background: var(--dark3);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.25s;
+      text-decoration: none;
+      color: var(--gray);
+    }
+    .social-btn:hover { background: var(--orange); border-color: var(--orange); color: var(--white); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 1.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    /* ─── ABOUT PAGE ─── */
+    .page-hero {
+      background: var(--dark);
+      padding: 5rem 5% 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 50%, rgba(245,100,10,0.12) 0%, transparent 60%);
+    }
+    .page-hero-content { position: relative; z-index: 1; max-width: 550px; }
+    .page-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      letter-spacing: 4px;
+      line-height: 0.95;
+    }
+    .page-hero p { color: var(--gray); margin-top: 1rem; font-size: 0.95rem; line-height: 1.6; }
+    .page-hero-shoe {
+      position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+      width: 40%; max-width: 500px;
+    }
+    .page-hero-shoe img { width: 100%; filter: drop-shadow(0 20px 40px rgba(245,100,10,0.35)) drop-shadow(0 0 60px rgba(245,100,10,0.1)); object-fit: contain; }
+
+    .about-story {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+      padding: 5rem 5%;
+    }
+    .about-story .text h2 {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      letter-spacing: 3px;
+      margin-bottom: 1rem;
+    }
+    .about-story .text p { color: var(--light-gray); font-size: 0.9rem; line-height: 1.8; }
+    .about-story .img-box {
+      position: relative;
+    }
+    .about-story .img-box img {
+      width: 100%; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+    }
+    .about-story .img-box::before {
+      content: '';
+      position: absolute; top: -10px; left: -10px;
+      width: 60%; height: 60%;
+      border-top: 3px solid var(--orange);
+      border-left: 3px solid var(--orange);
+    }
+
+    .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .mission-card {
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 2rem;
+      border-left: 4px solid var(--orange);
+    }
+    .mission-card h4 {
+      font-family: var(--font-condensed);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--orange);
+      margin-bottom: 0.8rem;
+    }
+    .mission-card p { font-size: 0.85rem; color: var(--light-gray); line-height: 1.7; }
+
+    .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .team-card { text-align: center; }
+    .team-avatar {
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      background: var(--dark3);
+      overflow: hidden;
+      border: 3px solid var(--dark2);
+      transition: border-color 0.3s;
+    }
+    .team-card:hover .team-avatar { border-color: var(--orange); }
+    .team-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .team-name {
+      font-family: var(--font-condensed);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .team-role { font-size: 0.78rem; color: var(--orange); margin-top: 0.2rem; }
+
+    /* ─── COLLECTION PAGE ─── */
+    .filter-tabs {
+      display: flex; gap: 0.5rem; flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+    .filter-tab {
+      padding: 0.55rem 1.5rem;
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--gray);
+      font-family: var(--font-condensed);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.25s;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+    .filter-tab:hover, .filter-tab.active {
+      background: var(--orange);
+      color: var(--white);
+      border-color: var(--orange);
+    }
+
+    /* ─── GALLERY PAGE ─── */
+    .gallery-masonry {
+      columns: 3;
+      column-gap: 1rem;
+    }
+    .gallery-masonry .g-item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      background: var(--dark2);
+      cursor: pointer;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .gallery-masonry .g-item img {
+      width: 100%; object-fit: contain;
+      transition: transform 0.4s;
+    }
+    .gallery-masonry .g-item:hover img { transform: scale(1.06); }
+    .gallery-masonry .g-item::after {
+      content: '＋';
+      position: absolute; inset: 0;
+      background: rgba(245,100,10,0.65);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .gallery-masonry .g-item:hover::after { opacity: 1; }
+
+    /* ─── REVIEWS PAGE ─── */
+    .rating-overview {
+      display: grid; grid-template-columns: auto 1fr;
+      gap: 3rem; align-items: center;
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+    }
+    .big-rating {
+      text-align: center;
+    }
+    .big-rating .num {
+      font-family: var(--font-display);
+      font-size: 5rem;
+      color: var(--orange);
+      line-height: 1;
+    }
+    .big-rating .stars-big { font-size: 1.2rem; color: var(--orange); margin: 0.3rem 0; }
+    .big-rating .count { font-size: 0.75rem; color: var(--gray); }
+    .rating-bars { display: flex; flex-direction: column; gap: 0.6rem; }
+    .rating-row { display: flex; align-items: center; gap: 1rem; }
+    .rating-row .label {
+      font-size: 0.8rem; color: var(--gray);
+      width: 20px; text-align: right;
+    }
+    .rating-bar-wrap { flex: 1; height: 6px; background: var(--dark3); border-radius: 3px; }
+    .rating-bar { height: 6px; background: var(--orange); border-radius: 3px; }
+    .rating-row .pct { font-size: 0.75rem; color: var(--gray); width: 30px; }
+
+    .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .video-card {
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+    .video-thumb {
+      height: 180px;
+      background: var(--dark3);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .video-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+    .play-btn {
+      position: absolute;
+      width: 52px; height: 52px;
+      background: var(--orange);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      color: white;
+      z-index: 1;
+      transition: transform 0.3s;
+    }
+    .video-card:hover .play-btn { transform: scale(1.15); }
+    .video-info { padding: 1rem; }
+    .video-info h4 { font-size: 0.9rem; font-weight: 600; }
+    .video-info p { font-size: 0.75rem; color: var(--gray); margin-top: 0.25rem; }
+
+    /* ─── CONTACT PAGE ─── */
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: start;
+    }
+    .contact-form-wrap h3 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      letter-spacing: 3px;
+      margin-bottom: 0.5rem;
+    }
+    .contact-form-wrap p { font-size: 0.85rem; color: var(--gray); margin-bottom: 2rem; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label {
+      display: block;
+      font-family: var(--font-condensed);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 0.4rem;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 0.85rem 1rem;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.25s;
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--orange); }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+
+    .contact-info-wrap h3 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      letter-spacing: 3px;
+      margin-bottom: 2rem;
+    }
+    .contact-info-item {
+      display: flex; gap: 1rem; align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+    .contact-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: rgba(245,100,10,0.15);
+      border: 1px solid rgba(245,100,10,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .contact-info-item h5 {
+      font-family: var(--font-condensed);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.25rem;
+    }
+    .contact-info-item p { font-size: 0.85rem; color: var(--light-gray); }
+    .map-placeholder {
+      width: 100%;
+      height: 220px;
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 2rem;
+      font-size: 2rem;
+      color: var(--gray);
+      position: relative;
+      overflow: hidden;
+    }
+    .map-placeholder::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 30px,
+        rgba(255,255,255,0.02) 30px, rgba(255,255,255,0.02) 31px
+      ),
+      repeating-linear-gradient(
+        90deg, transparent, transparent 30px,
+        rgba(255,255,255,0.02) 30px, rgba(255,255,255,0.02) 31px
+      );
+    }
+    .map-pin {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    }
+    .map-pin span:first-child { font-size: 2.5rem; }
+    .map-pin p { font-size: 0.75rem; color: var(--gray); text-align: center; }
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
+      background: var(--orange); color: var(--white);
+      padding: 1rem 1.8rem;
+      font-family: var(--font-condensed);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transform: translateX(120%);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    }
+    .toast.show { transform: translateX(0); }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-in {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      width: 60px; height: 3px;
+      background: var(--orange);
+      margin: 1rem 0;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-shoe { width: 50%; opacity: 0.5; }
+      .hero h1 { font-size: 4.5rem; }
+      .newsletter-section { flex-direction: column; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .about-story { grid-template-columns: 1fr; }
+      .mission-grid { grid-template-columns: 1fr; }
+      .rating-overview { grid-template-columns: 1fr; }
+      .video-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-masonry { columns: 2; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero h1 { font-size: 3.5rem; }
+      .hero-shoe { display: none; }
+      .newsletter-form { flex-direction: column; }
+      .newsletter-form input { border-right: 1px solid rgba(255,255,255,0.1); }
+      .video-grid { grid-template-columns: 1fr; }
+      .gallery-masonry { columns: 2; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav id="navbar">
+  <a class="nav-logo" href="#" onclick="showPage('home')">SHOE<span>Z</span></a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home')" data-page="home" class="active">Home</a></li>
+    <li><a href="#" onclick="showPage('about')" data-page="about">About</a></li>
+    <li><a href="#" onclick="showPage('collection')" data-page="collection">Collection</a></li>
+    <li><a href="#" onclick="showPage('gallery')" data-page="gallery">Gallery</a></li>
+    <li><a href="#" onclick="showPage('reviews')" data-page="reviews">Reviews</a></li>
+    <li><a href="#" onclick="showPage('contact')" data-page="contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" id="hamburger">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" onclick="showPage('home'); closeMenu()">Home</a>
+  <a href="#" onclick="showPage('about'); closeMenu()">About</a>
+  <a href="#" onclick="showPage('collection'); closeMenu()">Collection</a>
+  <a href="#" onclick="showPage('gallery'); closeMenu()">Gallery</a>
+  <a href="#" onclick="showPage('reviews'); closeMenu()">Reviews</a>
+  <a href="#" onclick="showPage('contact'); closeMenu()">Contact</a>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     HOME PAGE
+═══════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-tag">New Collection 2026</div>
+      <h1>STEP UP<br><span class="orange">YOUR</span><br>STYLE</h1>
+      <p>Discover the perfect blend of comfort, style and performance. Premium footwear for every look.</p>
+      <button class="btn-primary" onclick="showPage('collection')">Explore Collection</button>
+      <div class="hero-dots">
+        <div class="hero-dot active"></div>
+        <div class="hero-dot"></div>
+        <div class="hero-dot"></div>
+      </div>
+    </div>
+    <div class="hero-shoe">
+      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=95&auto=format&fit=crop&fm=webp" alt="Featured Shoe" />
+    </div>
+  </section>
+
+  <!-- Featured Shoes -->
+  <section class="section" style="background: var(--dark);">
+    <div class="container">
+      <div class="section-header" style="display:flex;align-items:flex-end;justify-content:space-between;">
+        <div>
+          <div class="section-title">FEATURED <span>SHOES</span></div>
+          <div class="divider"></div>
+        </div>
+        <button class="btn-outline" onclick="showPage('collection')">View More</button>
+      </div>
+      <div class="grid-4">
+        <div class="shoe-card fade-in">
+          <div class="img-wrap"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=95&auto=format&fit=crop" alt="Nike Air Max"></div>
+          <div class="card-body">
+            <div class="card-name">Nike Air Max</div>
+            <div class="card-desc">Comfortable running shoes for everyday.</div>
+            <div class="card-price"><span class="price">$129</span><button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.7rem;" onclick="showToast('Added to cart!')">Add</button></div>
+          </div>
+        </div>
+        <div class="shoe-card fade-in">
+          <div class="img-wrap"><img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&q=95&auto=format&fit=crop" alt="Adidas Ultraboost"></div>
+          <div class="card-body">
+            <div class="card-name">Adidas Ultraboost</div>
+            <div class="card-desc">Boost your performance and style.</div>
+            <div class="card-price"><span class="price">$149</span><button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.7rem;" onclick="showToast('Added to cart!')">Add</button></div>
+          </div>
+        </div>
+        <div class="shoe-card fade-in">
+          <div class="img-wrap"><img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500&q=95&auto=format&fit=crop" alt="Puma RS-X"></div>
+          <div class="card-body">
+            <div class="card-name">Puma RS-X</div>
+            <div class="card-desc">Stylish, chunky and super comfy.</div>
+            <div class="card-price"><span class="price">$109</span><button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.7rem;" onclick="showToast('Added to cart!')">Add</button></div>
+          </div>
+        </div>
+        <div class="shoe-card fade-in">
+          <div class="img-wrap"><img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=500&q=95&auto=format&fit=crop" alt="Nike Revolution 6"></div>
+          <div class="card-body">
+            <div class="card-name">Nike Revolution 6</div>
+            <div class="card-desc">Lightweight and perfect for daily run.</div>
+            <div class="card-price"><span class="price">$99</span><button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.7rem;" onclick="showToast('Added to cart!')">Add</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="section" style="background: var(--black);">
+    <div class="container">
+      <div class="section-header" style="text-align:center;">
+        <div class="section-title" style="display:block;">WHY CHOOSE <span>US</span></div>
+        <div class="divider" style="margin:1rem auto;"></div>
+      </div>
+      <div class="features-grid">
+        <div class="feature-item fade-in">
+          <div class="feature-icon">👟</div>
+          <h4>Comfortable</h4>
+          <p>Designed for all-day comfort and support.</p>
+        </div>
+        <div class="feature-item fade-in">
+          <div class="feature-icon">✨</div>
+          <h4>Stylish</h4>
+          <p>Trendy designs for every look.</p>
+        </div>
+        <div class="feature-item fade-in">
+          <div class="feature-icon">🛡️</div>
+          <h4>Durable</h4>
+          <p>High-quality materials built to last.</p>
+        </div>
+        <div class="feature-item fade-in">
+          <div class="feature-icon">⚡</div>
+          <h4>Modern Design</h4>
+          <p>Always ahead with modern innovation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Preview -->
+  <section class="section" style="background: var(--dark);">
+    <div class="container">
+      <div class="section-header" style="display:flex;align-items:flex-end;justify-content:space-between;">
+        <div>
+          <div class="section-title">GAL<span>LERY</span></div>
+          <div class="divider"></div>
+        </div>
+        <button class="btn-outline" onclick="showPage('gallery')">View Gallery</button>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=95&auto=format&fit=crop" alt="g1"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=95&auto=format&fit=crop" alt="g2"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400&q=95&auto=format&fit=crop" alt="g3"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=400&q=95&auto=format&fit=crop" alt="g4"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews Preview -->
+  <section class="section" style="background: var(--black);">
+    <div class="container">
+      <div class="section-header" style="text-align:center;">
+        <div class="section-title" style="display:block;">CUSTOMER <span>REVIEWS</span></div>
+        <div class="divider" style="margin:1rem auto;"></div>
+      </div>
+      <div class="grid-3">
+        <div class="review-card fade-in">
+          <div class="review-header">
+            <div class="review-avatar"><img src="https://i.pravatar.cc/100?img=11" alt="Ali Khan"></div>
+            <div><div class="review-name">Ali Khan</div><div class="stars">★★★★★</div></div>
+          </div>
+          <p class="review-text">Amazing quality and very comfortable. Highly recommended!</p>
+        </div>
+        <div class="review-card fade-in">
+          <div class="review-header">
+            <div class="review-avatar"><img src="https://i.pravatar.cc/100?img=47" alt="Sara Ahmed"></div>
+            <div><div class="review-name">Sara Ahmed</div><div class="stars">★★★★★</div></div>
+          </div>
+          <p class="review-text">Stylish, perfect fitting and great customer service.</p>
+        </div>
+        <div class="review-card fade-in">
+          <div class="review-header">
+            <div class="review-avatar"><img src="https://i.pravatar.cc/100?img=52" alt="Usman Tariq"></div>
+            <div><div class="review-name">Usman Tariq</div><div class="stars">★★★★★</div></div>
+          </div>
+          <p class="review-text">Best shoes I ever have. Good work ShoEZ!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <div class="newsletter-section">
+    <div class="newsletter-text">
+      <h3>NEWS<span style="color:var(--orange)">LETTER</span></h3>
+      <p>Subscribe to get updates on new arrivals and special offers.</p>
+    </div>
+    <div class="newsletter-form">
+      <input type="email" placeholder="Enter your email" id="nlEmail" />
+      <button onclick="subscribeNewsletter()">Subscribe</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">SHOE<span>Z</span></div>
+        <p class="footer-desc">Premium footwear for every occasion. Comfort meets style.</p>
+        <div class="social-links">
+          <a class="social-btn" href="#">f</a>
+          <a class="social-btn" href="#">in</a>
+          <a class="social-btn" href="#">tw</a>
+          <a class="social-btn" href="#">yt</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="#" onclick="showPage('home')">Home</a></li>
+          <li><a href="#" onclick="showPage('about')">About</a></li>
+          <li><a href="#" onclick="showPage('collection')">Collection</a></li>
+          <li><a href="#" onclick="showPage('gallery')">Gallery</a></li>
+          <li><a href="#" onclick="showPage('reviews')">Reviews</a></li>
+          <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact Info</h5>
+        <div class="contact-item">📧 info@shoez.com</div>
+        <div class="contact-item">📞 +92 300 1234567</div>
+        <div class="contact-item">📍 123 Street, Lahore, Pakistan</div>
+      </div>
+      <div class="footer-col">
+        <h5>Follow Us</h5>
+        <p style="font-size:0.85rem;color:var(--gray);line-height:1.7;">Stay connected with us on social media for the latest drops and offers.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 ShoEZ. All Rights Reserved.</div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ABOUT PAGE
+═══════════════════════════════════════════ -->
+<div class="page" id="page-about">
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <div class="hero-tag">Our Brand</div>
+      <h1>ABOUT<br><span style="color:var(--orange)">US</span></h1>
+      <div class="divider"></div>
+      <p>Get to know more about our brand, story, and the team behind it.</p>
+    </div>
+    <div class="page-hero-shoe">
+      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=95&fit=crop" alt="Shoe" />
+    </div>
+  </div>
+
+  <div class="about-story container" style="padding-top:5rem;padding-bottom:5rem;">
+    <div class="text">
+      <h2>OUR <span style="color:var(--orange)">STORY</span></h2>
+      <div class="divider"></div>
+      <p>ShoEZ was founded with the passion to deliver high-quality, stylish, and comfortable shoes for everyone. Our journey started in 2015 and we are growing strong with the love of our customers. From a small workshop in Lahore to a recognized brand across Pakistan, we have always believed that great footwear changes how you feel.</p>
+    </div>
+    <div class="img-box">
+      <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&q=95&auto=format&fit=crop" alt="Our Story" />
+    </div>
+  </div>
+
+  <section class="section" style="background: var(--dark);">
+    <div class="container">
+      <div class="section-title">MISSION &amp; <span>VISION</span></div>
+      <div class="divider"></div>
+      <br><br>
+      <div class="mission-grid">
+        <div class="mission-card fade-in">
+          <h4>Our Mission</h4>
+          <p>To provide high-quality footwear that combines comfort, style and durability for everyone across Pakistan and beyond.</p>
+        </div>
+        <div class="mission-card fade-in">
+          <h4>Our Vision</h4>
+          <p>To become a global brand known for quality, innovation and customer satisfaction — making premium footwear accessible to all.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--black);">
+    <div class="container">
+      <div class="section-title">OUR <span>TEAM</span></div>
+      <div class="divider"></div>
+      <br><br>
+      <div class="team-grid">
+        <div class="team-card fade-in">
+          <div class="team-avatar"><img src="https://i.pravatar.cc/150?img=12" alt="Hamza Ali"></div>
+          <div class="team-name">Hamza Ali</div>
+          <div class="team-role">CEO & Founder</div>
+        </div>
+        <div class="team-card fade-in">
+          <div class="team-avatar"><img src="https://i.pravatar.cc/150?img=47" alt="Ayesha Khan"></div>
+          <div class="team-name">Ayesha Khan</div>
+          <div class="team-role">Marketing Head</div>
+        </div>
+        <div class="team-card fade-in">
+          <div class="team-avatar"><img src="https://i.pravatar.cc/150?img=53" alt="Usman Shah"></div>
+          <div class="team-name">Usman Shah</div>
+          <div class="team-role">Product Designer</div>
+        </div>
+        <div class="team-card fade-in">
+          <div class="team-avatar"><img src="https://i.pravatar.cc/150?img=60" alt="Zain Raza"></div>
+          <div class="team-name">Zain Raza</div>
+          <div class="team-role">Sales Manager</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="newsletter-section">
+    <div class="newsletter-text">
+      <h3>NEWS<span style="color:var(--orange)">LETTER</span></h3>
+      <p>Subscribe for updates on new arrivals and special offers.</p>
+    </div>
+    <div class="newsletter-form">
+      <input type="email" placeholder="Enter your email" />
+      <button onclick="showToast('Subscribed! ✓')">Subscribe</button>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-grid">
+      <div><div class="footer-logo">SHOE<span>Z</span></div><p class="footer-desc">Premium footwear for every occasion.</p></div>
+      <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="#" onclick="showPage('home')">Home</a></li><li><a href="#" onclick="showPage('collection')">Collection</a></li><li><a href="#" onclick="showPage('contact')">Contact</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><div class="contact-item">📧 info@shoez.com</div><div class="contact-item">📞 +92 300 1234567</div></div>
+      <div class="footer-col"><h5>Follow Us</h5><div class="social-links"><a class="social-btn" href="#">f</a><a class="social-btn" href="#">in</a><a class="social-btn" href="#">tw</a></div></div>
+    </div>
+    <div class="footer-bottom">© 2026 ShoEZ. All Rights Reserved.</div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     COLLECTION PAGE
+═══════════════════════════════════════════ -->
+<div class="page" id="page-collection">
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <div class="hero-tag">Exclusive Range</div>
+      <h1>OUR<br><span style="color:var(--orange)">COLLECTION</span></h1>
+      <div class="divider"></div>
+      <p>Explore our exclusive range of shoes across all categories.</p>
+    </div>
+    <div class="page-hero-shoe">
+      <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&q=95&auto=format&fit=crop" alt="Shoe" />
+    </div>
+  </div>
+
+  <section class="section" style="background: var(--black);">
+    <div class="container">
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filterCollection('all', this)">🏃 Sports Shoes</button>
+        <button class="filter-tab" onclick="filterCollection('casual', this)">👟 Casual Shoes</button>
+        <button class="filter-tab" onclick="filterCollection('running', this)">🔥 Running Shoes</button>
+        <button class="filter-tab" onclick="filterCollection('sneakers', this)">👾 Sneakers</button>
+      </div>
+
+      <div class="grid-4" id="collectionGrid">
+        <div class="shoe-card fade-in" data-cat="all">
+          <div class="img-wrap"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=95&auto=format&fit=crop" alt="Nike Air Max"></div>
+          <div class="card-body"><div class="card-name">Nike Air Max</div><div class="card-desc">Comfortable & Stylish</div><div class="card-price"><span class="price">$129</span><button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.7rem;" onclick="showToast('Added to cart!')">Add</button></div></div>
+        </div>
+        <div class="shoe-card fade-in" data-cat="all">
+          <div class="img-wrap"><img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&q=95&auto=format&fit=crop" alt="Adidas Ultraboost"></div>
+          <div class="card-body"><div class="card-name">Adidas Ultraboost</div><div class="card-desc">Boost Performance</div><div class="card-price"><span class="price">$149</span><button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.7rem;" onclick="showToast('Added to cart!')">Add</button></div></div>
+        </div>
+        <div class="shoe-card fade-in" data-cat="casual">
+          <div class="img-wrap"><img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500&q=95&auto=format&fit=crop" alt="Puma RS-X"></div>
+          <div class="card-body"><div class="card-name">Puma RS-X</div><div class="card-desc">Trendy & Comfortable</div><div class="card-price"><span class="price">$109</span><button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.7rem;" onclick="showToast('Added to cart!')">Add</button></div></div>
+        </div>
+        <div class="shoe-card fade-in" data-cat="running">
+          <div class="img-wrap"><img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=500&q=95&auto=format&fit=crop" alt="Nike Revolution 6"></div>
+          <div class="card-body"><div class="card-name">Nike Revolution 6</div><div class="card-desc">Lightweight Run</div><div class="card-price"><span class="price">$99</span><button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.7rem;" onclick="showToast('Added to cart!')">Add</button></div></div>
+        </div>
+        <div class="shoe-card fade-in" data-cat="sneakers">
+          <div class="img-wrap"><img src="https://images.unsplash.com/photo-1539185441755-769473a23570?w=500&q=95&auto=format&fit=crop" alt="New Balance 574"></div>
+          <div class="card-body"><div class="card-name">New Balance 574</div><div class="card-desc">Classic & Stylish</div><div class="card-price"><span class="price">$119</span><button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.7rem;" onclick="showToast('Added to cart!')">Add</button></div></div>
+        </div>
+        <div class="shoe-card fade-in" data-cat="casual">
+          <div class="img-wrap"><img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=500&q=95&auto=format&fit=crop" alt="Reebok Floatride"></div>
+          <div class="card-body"><div class="card-name">Reebok Floatride</div><div class="card-desc">Ultimate Comfort</div><div class="card-price"><span class="price">$135</span><button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.7rem;" onclick="showToast('Added to cart!')">Add</button></div></div>
+        </div>
+        <div class="shoe-card fade-in" data-cat="running">
+          <div class="img-wrap"><img src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=500&q=95&auto=format&fit=crop" alt="Asics Gel-Kayano"></div>
+          <div class="card-body"><div class="card-name">Asics Gel-Kayano</div><div class="card-desc">Maximum Support</div><div class="card-price"><span class="price">$159</span><button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.7rem;" onclick="showToast('Added to cart!')">Add</button></div></div>
+        </div>
+        <div class="shoe-card fade-in" data-cat="sneakers">
+          <div class="img-wrap"><img src="https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=500&q=95&auto=format&fit=crop" alt="Converse Chuck 70"></div>
+          <div class="card-body"><div class="card-name">Converse Chuck 70</div><div class="card-desc">Timeless Style</div><div class="card-price"><span class="price">$89</span><button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.7rem;" onclick="showToast('Added to cart!')">Add</button></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div><div class="footer-logo">SHOE<span>Z</span></div><p class="footer-desc">Premium footwear for every occasion.</p></div>
+      <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="#" onclick="showPage('home')">Home</a></li><li><a href="#" onclick="showPage('about')">About</a></li><li><a href="#" onclick="showPage('contact')">Contact</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><div class="contact-item">📧 info@shoez.com</div><div class="contact-item">📞 +92 300 1234567</div></div>
+      <div class="footer-col"><h5>Follow Us</h5><div class="social-links"><a class="social-btn" href="#">f</a><a class="social-btn" href="#">in</a></div></div>
+    </div>
+    <div class="footer-bottom">© 2026 ShoEZ. All Rights Reserved.</div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     GALLERY PAGE
+═══════════════════════════════════════════ -->
+<div class="page" id="page-gallery">
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <div class="hero-tag">Latest Shots</div>
+      <h1>OUR<br><span style="color:var(--orange)">GALLERY</span></h1>
+      <div class="divider"></div>
+      <p>Check out our latest shoe collection gallery.</p>
+    </div>
+    <div class="page-hero-shoe">
+      <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&q=95&auto=format&fit=crop" alt="Shoe" />
+    </div>
+  </div>
+
+  <section class="section" style="background:var(--black);">
+    <div class="container">
+      <div class="filter-tabs">
+        <button class="filter-tab active">All</button>
+        <button class="filter-tab">Sports</button>
+        <button class="filter-tab">Casual</button>
+        <button class="filter-tab">Running</button>
+        <button class="filter-tab">Sneakers</button>
+      </div>
+      <div class="gallery-masonry">
+        <div class="g-item"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=95&auto=format&fit=crop" alt="g1"></div>
+        <div class="g-item"><img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&q=95&auto=format&fit=crop" alt="g2"></div>
+        <div class="g-item"><img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500&q=95&auto=format&fit=crop" alt="g3"></div>
+        <div class="g-item"><img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=500&q=95&auto=format&fit=crop" alt="g4"></div>
+        <div class="g-item"><img src="https://images.unsplash.com/photo-1539185441755-769473a23570?w=500&q=95&auto=format&fit=crop" alt="g5"></div>
+        <div class="g-item"><img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=500&q=95&auto=format&fit=crop" alt="g6"></div>
+        <div class="g-item"><img src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=500&q=95&auto=format&fit=crop" alt="g7"></div>
+        <div class="g-item"><img src="https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=500&q=95&auto=format&fit=crop" alt="g8"></div>
+        <div class="g-item"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=95&auto=format&fit=crop" alt="g9"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div><div class="footer-logo">SHOE<span>Z</span></div><p class="footer-desc">Premium footwear for every occasion.</p></div>
+      <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="#" onclick="showPage('home')">Home</a></li><li><a href="#" onclick="showPage('collection')">Collection</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><div class="contact-item">📧 info@shoez.com</div></div>
+      <div class="footer-col"><h5>Follow Us</h5><div class="social-links"><a class="social-btn" href="#">f</a><a class="social-btn" href="#">tw</a></div></div>
+    </div>
+    <div class="footer-bottom">© 2026 ShoEZ. All Rights Reserved.</div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     REVIEWS PAGE
+═══════════════════════════════════════════ -->
+<div class="page" id="page-reviews">
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <div class="hero-tag">What Customers Say</div>
+      <h1>CUSTOMER<br><span style="color:var(--orange)">REVIEWS</span></h1>
+      <div class="divider"></div>
+      <p>Honest feedback from our valued customers across Pakistan.</p>
+    </div>
+    <div class="page-hero-shoe">
+      <img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=600&q=95&auto=format&fit=crop" alt="Shoe" />
+    </div>
+  </div>
+
+  <section class="section" style="background:var(--black);">
+    <div class="container">
+      <!-- Rating Overview -->
+      <div class="rating-overview fade-in">
+        <div class="big-rating">
+          <div class="num">4.8</div>
+          <div class="stars-big">★★★★★</div>
+          <div class="count">Based on 290+ reviews</div>
+        </div>
+        <div class="rating-bars">
+          <div class="rating-row"><span class="label">5</span><div class="rating-bar-wrap"><div class="rating-bar" style="width:85%"></div></div><span class="pct">85%</span></div>
+          <div class="rating-row"><span class="label">4</span><div class="rating-bar-wrap"><div class="rating-bar" style="width:10%"></div></div><span class="pct">10%</span></div>
+          <div class="rating-row"><span class="label">3</span><div class="rating-bar-wrap"><div class="rating-bar" style="width:3%"></div></div><span class="pct">3%</span></div>
+          <div class="rating-row"><span class="label">2</span><div class="rating-bar-wrap"><div class="rating-bar" style="width:1%"></div></div><span class="pct">1%</span></div>
+          <div class="rating-row"><span class="label">1</span><div class="rating-bar-wrap"><div class="rating-bar" style="width:1%"></div></div><span class="pct">1%</span></div>
+        </div>
+      </div>
+
+      <!-- Reviews Grid -->
+      <div class="grid-3" style="margin-bottom:4rem;">
+        <div class="review-card fade-in">
+          <div class="review-header">
+            <div class="review-avatar"><img src="https://i.pravatar.cc/100?img=11" alt="Bilal Ahmed"></div>
+            <div><div class="review-name">Bilal Ahmed</div><div class="stars">★★★★★</div><div style="font-size:0.7rem;color:var(--gray);">Verified Buyer</div></div>
+          </div>
+          <p class="review-text">Excellent quality and super comfortable. Will buy again! The packaging was also very neat.</p>
+        </div>
+        <div class="review-card fade-in">
+          <div class="review-header">
+            <div class="review-avatar"><img src="https://i.pravatar.cc/100?img=48" alt="Hira Noor"></div>
+            <div><div class="review-name">Hira Noor</div><div class="stars">★★★★★</div><div style="font-size:0.7rem;color:var(--gray);">Verified Buyer</div></div>
+          </div>
+          <p class="review-text">Stylish and best fitting shoes. Highly recommended for anyone looking for quality footwear!</p>
+        </div>
+        <div class="review-card fade-in">
+          <div class="review-header">
+            <div class="review-avatar"><img src="https://i.pravatar.cc/100?img=54" alt="Fahad Khan"></div>
+            <div><div class="review-name">Fahad Khan</div><div class="stars">★★★★★</div><div style="font-size:0.7rem;color:var(--gray);">Verified Buyer</div></div>
+          </div>
+          <p class="review-text">Amazing experience from order to delivery. 5 stars all the way, will order again soon!</p>
+        </div>
+        <div class="review-card fade-in">
+          <div class="review-header">
+            <div class="review-avatar"><img src="https://i.pravatar.cc/100?img=12" alt="Ali Khan"></div>
+            <div><div class="review-name">Ali Khan</div><div class="stars">★★★★★</div><div style="font-size:0.7rem;color:var(--gray);">Verified Buyer</div></div>
+          </div>
+          <p class="review-text">Amazing quality and very comfortable. Highly recommended! Best shoes for daily use.</p>
+        </div>
+        <div class="review-card fade-in">
+          <div class="review-header">
+            <div class="review-avatar"><img src="https://i.pravatar.cc/100?img=47" alt="Sara Ahmed"></div>
+            <div><div class="review-name">Sara Ahmed</div><div class="stars">★★★★★</div><div style="font-size:0.7rem;color:var(--gray);">Verified Buyer</div></div>
+          </div>
+          <p class="review-text">Stylish, perfect fitting and great customer service throughout the whole process.</p>
+        </div>
+        <div class="review-card fade-in">
+          <div class="review-header">
+            <div class="review-avatar"><img src="https://i.pravatar.cc/100?img=52" alt="Usman Tariq"></div>
+            <div><div class="review-name">Usman Tariq</div><div class="stars">★★★★★</div><div style="font-size:0.7rem;color:var(--gray);">Verified Buyer</div></div>
+          </div>
+          <p class="review-text">Best shoes I ever have. Good work ShoEZ! Keep it up. Will recommend to all friends.</p>
+        </div>
+      </div>
+
+      <!-- Video Reviews -->
+      <div class="section-title">VIDEO <span>REVIEWS</span></div>
+      <div class="divider" style="margin-bottom:2rem;"></div>
+      <div class="video-grid">
+        <div class="video-card fade-in">
+          <div class="video-thumb">
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=95&auto=format&fit=crop" alt="video1">
+            <div class="play-btn">▶</div>
+          </div>
+          <div class="video-info"><h4>Nike Air Max Review</h4><p>by Bilal Ahmed</p></div>
+        </div>
+        <div class="video-card fade-in">
+          <div class="video-thumb">
+            <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&q=95&auto=format&fit=crop" alt="video2">
+            <div class="play-btn">▶</div>
+          </div>
+          <div class="video-info"><h4>Unboxing ShoEZ Package</h4><p>by Hira Noor</p></div>
+        </div>
+        <div class="video-card fade-in">
+          <div class="video-thumb">
+            <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500&q=95&auto=format&fit=crop" alt="video3">
+            <div class="play-btn">▶</div>
+          </div>
+          <div class="video-info"><h4>Puma RS-X Honest Review</h4><p>by Sara Ahmed</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div><div class="footer-logo">SHOE<span>Z</span></div><p class="footer-desc">Premium footwear for every occasion.</p></div>
+      <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="#" onclick="showPage('home')">Home</a></li><li><a href="#" onclick="showPage('collection')">Collection</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><div class="contact-item">📧 info@shoez.com</div></div>
+      <div class="footer-col"><h5>Follow Us</h5><div class="social-links"><a class="social-btn" href="#">f</a><a class="social-btn" href="#">tw</a></div></div>
+    </div>
+    <div class="footer-bottom">© 2026 ShoEZ. All Rights Reserved.</div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CONTACT PAGE
+═══════════════════════════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <div class="hero-tag">Get In Touch</div>
+      <h1>CONTACT<br><span style="color:var(--orange)">US</span></h1>
+      <div class="divider"></div>
+      <p>We would love to hear from you. Reach out any time!</p>
+    </div>
+    <div class="page-hero-shoe">
+      <img src="https://images.unsplash.com/photo-1539185441755-769473a23570?w=600&q=95&auto=format&fit=crop" alt="Shoe" />
+    </div>
+  </div>
+
+  <section class="section" style="background:var(--black);">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-form-wrap fade-in">
+          <h3>SEND <span style="color:var(--orange)">MESSAGE</span></h3>
+          <p>Fill in the form below and we'll get back to you shortly.</p>
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" placeholder="Enter your name" id="cName" />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="Enter your email" id="cEmail" />
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea rows="5" placeholder="Your message..." id="cMsg"></textarea>
+          </div>
+          <button class="btn-primary" onclick="sendContact()">Send Message</button>
+        </div>
+
+        <div class="fade-in">
+          <div class="contact-info-wrap">
+            <h3>GET IN <span style="color:var(--orange)">TOUCH</span></h3>
+            <div class="contact-info-item">
+              <div class="contact-icon">📧</div>
+              <div>
+                <h5>Email</h5>
+                <p>info@shoez.com</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-icon">📞</div>
+              <div>
+                <h5>Phone</h5>
+                <p>+92 300 1234567</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-icon">📍</div>
+              <div>
+                <h5>Address</h5>
+                <p>123 Street, Lahore, Pakistan</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:2rem;">
+            <h4 style="font-family:var(--font-condensed);font-size:0.8rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:1rem;">Follow Us</h4>
+            <div class="social-links">
+              <a class="social-btn" href="#">f</a>
+              <a class="social-btn" href="#">in</a>
+              <a class="social-btn" href="#">tw</a>
+              <a class="social-btn" href="#">yt</a>
+            </div>
+          </div>
+
+          <div class="map-placeholder">
+            <div class="map-pin">
+              <span>📍</span>
+              <p>123 Street, Lahore, Pakistan</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div><div class="footer-logo">SHOE<span>Z</span></div><p class="footer-desc">Premium footwear for every occasion.</p></div>
+      <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="#" onclick="showPage('home')">Home</a></li><li><a href="#" onclick="showPage('collection')">Collection</a></li><li><a href="#" onclick="showPage('reviews')">Reviews</a></li></ul></div>
+      <div class="footer-col"><h5>Contact Info</h5><div class="contact-item">📧 info@shoez.com</div><div class="contact-item">📞 +92 300 1234567</div><div class="contact-item">📍 123 Street, Lahore, Pakistan</div></div>
+      <div class="footer-col"><h5>Follow Us</h5><div class="social-links"><a class="social-btn" href="#">f</a><a class="social-btn" href="#">in</a><a class="social-btn" href="#">tw</a><a class="social-btn" href="#">yt</a></div></div>
+    </div>
+    <div class="footer-bottom">© 2026 ShoEZ. All Rights Reserved.</div>
+  </footer>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ─── PAGE NAVIGATION ───
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('data-page') === name);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    initFadeIns();
+    return false;
+  }
+
+  // ─── MOBILE MENU ───
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // ─── NAV SCROLL ───
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // ─── FADE IN ON SCROLL ───
+  function initFadeIns() {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('#page-' + getCurrentPage() + ' .fade-in').forEach(el => {
+      if (!el.classList.contains('visible')) obs.observe(el);
+    });
+  }
+  function getCurrentPage() {
+    const active = document.querySelector('.page.active');
+    return active ? active.id.replace('page-', '') : 'home';
+  }
+
+  // ─── TOAST ───
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ─── NEWSLETTER ───
+  function subscribeNewsletter() {
+    const email = document.getElementById('nlEmail').value;
+    if (!email || !email.includes('@')) { showToast('Please enter a valid email!'); return; }
+    showToast('Subscribed successfully! ✓');
+    document.getElementById('nlEmail').value = '';
+  }
+
+  // ─── CONTACT FORM ───
+  function sendContact() {
+    const name = document.getElementById('cName').value;
+    const email = document.getElementById('cEmail').value;
+    const msg = document.getElementById('cMsg').value;
+    if (!name || !email || !msg) { showToast('Please fill all fields!'); return; }
+    showToast('Message sent! We\'ll reply soon ✓');
+    document.getElementById('cName').value = '';
+    document.getElementById('cEmail').value = '';
+    document.getElementById('cMsg').value = '';
+  }
+
+  // ─── COLLECTION FILTER ───
+  function filterCollection(cat, btn) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#collectionGrid .shoe-card').forEach(card => {
+      const c = card.getAttribute('data-cat');
+      card.style.display = (cat === 'all' || c === cat) ? 'block' : 'none';
+    });
+  }
+
+  // ─── GALLERY TABS ───
+  document.querySelectorAll('#page-gallery .filter-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('#page-gallery .filter-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // ─── INIT ───
+  window.addEventListener('load', () => { initFadeIns(); });
+</script>
+</body>
+</html>
